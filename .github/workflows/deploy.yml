@@ -6,8 +6,8 @@ on:
       - main
 
 permissions:
-  id-token: write
-  contents: read
+  id-token: write  # This allows GitHub Actions to request OIDC tokens
+  contents: read    # This is necessary for checking out the repo
 
 jobs:
   login-to-azure:
@@ -20,9 +20,11 @@ jobs:
       - name: Login to Azure using OIDC
         uses: azure/login@v1
         with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}  # This is optional for OIDC
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          # Remove client-id if using OIDC
+          # Using OIDC allows you to avoid using client-id, client-secret
 
       - name: Azure CLI example
         run: az account show
